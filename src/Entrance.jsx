@@ -1,6 +1,23 @@
 /** Users can enter their name to receive a token from the API. */
-export default function Entrance() {
-  // TODO: call signup when form is submitted
+import React, { useState, useContext } from "react";
+import { AuthContext } from "./AuthContext"; // adjust path as needed
+
+const Entrance = () => {
+  const { signup } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await signup(username);
+      console.log("Signup successful!");
+    } catch (error) {
+      console.error("Signup failed:", error);
+    }
+  };
+  const handleNameChange = (event) => {
+    setUsername(event.target.value);
+  };
 
   return (
     <>
@@ -15,13 +32,14 @@ export default function Entrance() {
         fixed on you. The one on the left opens its mouth, and with a deep,
         rumbling voice, it asks, "Who approaches? Speak your name."
       </p>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>
           Name
-          <input name="name" />
+          <input name="name" onChange={handleNameChange} />
         </label>
         <button>Respond</button>
       </form>
     </>
   );
-}
+};
+export default Entrance;
